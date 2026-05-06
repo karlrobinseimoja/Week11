@@ -3,7 +3,7 @@ const db = require('../db');
 const router = express.Router();
 
 router.get('/', async (req, res) => {
-    const recipes = await db.query('SELECT a.recipeName, b.ingredientName FROM recipe a INNER JOIN IngredientInRecipe c ON a.id = c.recipeId INNER JOIN ingredient b ON b.id = c.ingredientId;');  
+    const recipes = await db.query('SELECT a.recipeName, a.instructions, b.ingredientName FROM recipe a INNER JOIN IngredientInRecipe c ON a.id = c.recipeId INNER JOIN ingredient b ON b.id = c.ingredientId;');  
     const recipeMap = {};
 
     for(const item of recipes.rows) {
@@ -42,7 +42,7 @@ router.get('/search', async (req, res) => {
     const searchString = req.query.recipeName;
     console.log(searchString);
 
-    const recipe = await db.query('SELECT a.recipeName, b.ingredientName FROM recipe a INNER JOIN IngredientInRecipe c ON a.id = c.recipeId INNER JOIN ingredient b ON b.id = c.ingredientId WHERE a.recipeName = $1', [searchString]);
+    const recipe = await db.query('SELECT a.recipeName, a.instructions, b.ingredientName FROM recipe a INNER JOIN IngredientInRecipe c ON a.id = c.recipeId INNER JOIN ingredient b ON b.id = c.ingredientId WHERE a.recipeName = $1', [searchString]);
 
     const recipeMap = {};
 
